@@ -9,7 +9,7 @@ task conanInstall {
         for (final def arch in archs) {
             def archSort = getArchShortName(arch)
             final def cmd = "${conanExecutable} install " +
-                    " ../src/main/conan/conanfile.txt --profile android_ndk21_api21_profile " +
+                    " ../src/main/conan/conanfile.txt --profile ../src/main/conan/android_ndk21_api21_profile " +
                     " -s build_type=${build_type}" +
                     " -s arch=${archSort}" +
                     " -c tools.cmake.cmake_layout:build_folder_vars=['settings.arch'] " +

@@ -1,0 +1,45 @@
+task conanInstall {
+    def buildDir = new File("app/build")
+    buildDir.mkdirs()
+    def conanExecutable = "conan"
+    ["Debug", "RelWithDebInfo", "Release"].each { String build_type ->
+        def archs = ['armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64']
+        def abi = android.defaultConfig.ndk.abiFilters
+        if (!abi.isEmpty()) archs = abi
+        for (final def arch in archs) {
+            def archSort = getArchShortName(arch)
+            final def cmd = "${conanExecutable} install " +
+                    " ../src/main/conan/conanfile.txt --profile android_ndk21_api21_profile " +
+                    " -s build_type=${build_type}" +
+                    " -s arch=${archSort}" +
+                    " -c tools.cmake.cmake_layout:build_folder_vars=['settings.arch'] " +
+                    " --build missing "
+            println(">>$cmd")
+
+            def sout = new StringBuilder(), serr = new StringBuilder()
+            def proc = cmd.execute(null, project.buildDir)
+            proc.consumeProcessOutput(sout, serr)
+            proc.waitFor()
+            println "$sout $serr"
+            if (proc.exitValue() != 0) {
+                throw new Exception("out> $sout err> $serr" + "\nCommand: ${cmd}")
+            }
+        }
+    }
+}
+
+static def getArchShortName(arch) {
+    switch (arch) {
+        case "armeabi-v7a":
+            return "armv7"
+        case "arm64-v8a":
+            return "armv8"
+        case "x86":
+            return "x86"
+        case "x86_64":
+            return "x86_64"
+        default:
+            throw new Exception("not support aib ${arch}")
+    }
+}
+

@@ -1,0 +1,9 @@
+[requires]
+libyuv/1854
+
+[generators]
+CMakeToolchain
+CMakeDeps
+
+[layout]
+cmake_layout

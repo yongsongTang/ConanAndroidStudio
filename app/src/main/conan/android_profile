@@ -7,12 +7,3 @@ compiler.cppstd=14
 compiler.version=9
 os=Android
 os.api_level=21
-
-[tool_requires]
-
-[options]
-
-[conf]
-tools.android:ndk_path=/home/tys-matebook/Android/Sdk/ndk/21.1.6352462
-
-[buildenv]
